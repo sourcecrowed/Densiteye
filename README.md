@@ -12,7 +12,7 @@ Its other outputs include this mask:
 
 ![out2](https://github.com/sourcecrowed/Densiteye/assets/33704049/d628a37d-8174-49d5-826b-c2fdb7d84aee)
 
-The ridge peaks of the outline density graphic for non-transparents:
+The ridge peaks of the density graphic for non-transparents:
 
 ![out3](https://github.com/sourcecrowed/Densiteye/assets/33704049/3aa16dde-2861-40e2-bb14-7dbe655b7a9f)
 
