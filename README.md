@@ -1,6 +1,6 @@
 Densiteye is a WIP experiment. It does not yet contain command line arguments, its own library, or other niceties. 
 
-Given an image named "test.png" in the project's root directory...
+Given an image with a transparent background separating foreground elements and named "test.png" in the project's root directory...
 
 ![test](https://github.com/sourcecrowed/Densiteye/assets/33704049/e522b493-e58e-4359-baba-ec3c0abb3d29)
 
