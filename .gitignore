@@ -1,3 +1,12 @@
 outputs/
 main
 main.s
+output_test/test.gradient-background.png
+output_test/test.gradient-foreground.png
+output_test/test.gradient.png
+output_test/test.inverse-peaklines.png
+output_test/test.peaklines.png
+output_test/test.scaleit.png
+test.png
+out/Densiteye.o
+densiteye
