@@ -175,8 +175,15 @@ namespace Densiteye
       layersContainer[y * img.getSize().x + x] > 0; 
     };
     
-    FloodLayering(img, maxLayer, floodLayers, [](auto const &color){ return color.a == 0; }, edgeCompCheck);
-    FloodLayering(img, inverseMaxLayer, inverseFloodLayers, [](auto const &color){ return color.a != 0; }, inverseEdgeCompCheck);
+    if (!args.IsOpaqueProcessingDisabled())
+    {
+      FloodLayering(img, maxLayer, floodLayers, [](auto const &color){ return color.a == 0; }, edgeCompCheck);
+    }
+
+    if (!args.IsTransparentProcessingDisabled())
+    {
+      FloodLayering(img, inverseMaxLayer, inverseFloodLayers, [](auto const &color){ return color.a != 0; }, inverseEdgeCompCheck);
+    }
 
     sf::Image mergedImgs;
     sf::Image imgOut;
@@ -236,7 +243,7 @@ namespace Densiteye
     {
       PeakExtractionRender(invImgOut, inverseFloodLayers, invNeighbor).saveToFile((args.GetOutputFolder() / (args.GetOutputName() + ".inverse-peaklines.png")).string());
     }
-    
+
     return 0;
   }
 }
