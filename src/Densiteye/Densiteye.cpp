@@ -208,69 +208,6 @@ namespace Densiteye
       mergedImgs.saveToFile((args.GetOutputFolder() / (args.GetOutputName() + ".gradient.png")).string());
     }
 
-    sf::ContextSettings ctxSettings;
-    ctxSettings.antialiasingLevel = 4;
-    
-    sf::RenderTexture scaleIt;
-    float div = 1;
-    scaleIt.create(imgOut.getSize().x / div, imgOut.getSize().y / div, ctxSettings);
-
-    scaleIt.clear(sf::Color::Transparent);
-    
-    for (int y = 0; y < imgOut.getSize().y; ++y)
-    {
-      for (int x = 0; x < imgOut.getSize().x; ++x)
-      {
-        int floodLayer = floodLayers[y * imgOut.getSize().x + x];
-
-        // if (floodLayer > 6)
-        //   continue;
-
-        
-        float radius = std::round((float)floodLayer / 2.f);
-        
-        sf::CircleShape circle(radius);
-        circle.setOrigin(circle.getRadius() , circle.getRadius() );
-
-        circle.setFillColor(
-        {
-          255, 255, 255,
-          img.getPixel(x, y).a
-        });
-        
-        circle.setPosition(x / div, y / div);
-        scaleIt.draw(circle);
-      }
-    }
-    
-    for (int y = 0; y < imgOut.getSize().y; ++y)
-    {
-      for (int x = 0; x < imgOut.getSize().x; ++x)
-      {
-        int floodLayer = inverseFloodLayers[y * imgOut.getSize().x + x];
-
-        if (floodLayer == 0)
-          continue;
-
-        
-        float radius = .5f;
-        //std::round((float)floodLayer / 2.f);
-        
-        sf::CircleShape circle(radius);
-        circle.setOrigin(circle.getRadius() , circle.getRadius() );
-
-        circle.setFillColor(sf::Color::Black);
-        
-        circle.setPosition(x / div, y / div);
-        scaleIt.draw(circle);
-      }
-    }
-
-    scaleIt.display();
-
-    scaleIt.getTexture().copyToImage().saveToFile(
-      (args.GetOutputFolder() / (args.GetOutputName() + ".scaleit.png")).string());
-
     auto invNeighbor=[&](int x, int y)
     {
       if (x < 0 || y < 0 || x >= imgOut.getSize().x || y >= imgOut.getSize().y)
@@ -290,12 +227,16 @@ namespace Densiteye
     sf::Image invImgOut;
     invImgOut.create(imgOut.getSize().x, imgOut.getSize().y, imgOut.getPixelsPtr());
 
-    imgOut = PeakExtractionRender(imgOut, floodLayers, neighbor);
-    invImgOut = PeakExtractionRender(invImgOut, inverseFloodLayers, invNeighbor);
+    if (!args.IsOpaqueProcessingDisabled())
+    {
+      PeakExtractionRender(imgOut, floodLayers, neighbor).saveToFile((args.GetOutputFolder() / (args.GetOutputName() + ".peaklines.png")).string());
+    }
 
-    imgOut.saveToFile((args.GetOutputFolder() / (args.GetOutputName() + ".peaklines.png")).string());
-    invImgOut.saveToFile((args.GetOutputFolder() / (args.GetOutputName() + ".inverse-peaklines.png")).string());
-
+    if (!args.IsTransparentProcessingDisabled())
+    {
+      PeakExtractionRender(invImgOut, inverseFloodLayers, invNeighbor).saveToFile((args.GetOutputFolder() / (args.GetOutputName() + ".inverse-peaklines.png")).string());
+    }
+    
     return 0;
   }
 }
